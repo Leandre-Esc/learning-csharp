@@ -1,4 +1,4 @@
-namespace LCS.Domain.Interfaces;
+namespace LCS.Application.Abstractions;
 
 public interface IEnvironmentService
 {

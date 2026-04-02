@@ -1,1 +1,12 @@
 .idea/
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.DotSettings.user
+
+bin/
+obj/
+
+.DS_Store

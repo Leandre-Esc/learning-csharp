@@ -1,4 +1,4 @@
-using LCS.Domain.Interfaces;
+using LCS.Application.Abstractions;
 using MediatR;
 
 namespace LCS.Application.Features.Ping.Queries;

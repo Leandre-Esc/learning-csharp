@@ -1,9 +1,16 @@
-using LCS.Domain.Interfaces;
+using LCS.Application.Abstractions;
+using Microsoft.Extensions.Hosting;
 
 namespace LCS.Infra.Services;
 
-public class EnvironmentService : IEnvironmentService
+public sealed class EnvironmentService : IEnvironmentService
 {
-    public string EnvironmentName =>
-        Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
+    private readonly IHostEnvironment _hostEnvironment;
+
+    public EnvironmentService(IHostEnvironment hostEnvironment)
+    {
+        _hostEnvironment = hostEnvironment;
+    }
+
+    public string EnvironmentName => _hostEnvironment.EnvironmentName;
 }
