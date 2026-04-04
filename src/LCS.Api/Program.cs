@@ -1,21 +1,32 @@
-using LCS.Api.Endpoints;
-using LCS.Application;
 using LCS.Infra;
+using LCS.Infra.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddOpenApi();
-builder.Services.AddApplicationServices();
-builder.Services.AddInfraServices();
-builder.Services.AddProblemDetails();
+// --- Services -----------------------------------------------------
 
+var connectionString = builder.Configuration.GetConnectionString("Postgres")
+                       ?? throw new InvalidOperationException("Connection string 'Postgres' not found.");
+
+builder.Services.AddInfraServices(connectionString);
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+
+// --- Build --------------------------------------------------------
 var app = builder.Build();
 
-app.UseExceptionHandler();
+// --- Migration ----------------------------------------------------
+
+using (var scope = app.Services.CreateScope())
+{
+    var migrator = scope.ServiceProvider.GetRequiredService<DatabaseMigrator>();
+    await migrator.MigrateAsync();
+}
+
+// --- Middleware pipeline ------------------------------------------
+
 app.UseHttpsRedirection();
-
-if (app.Environment.IsDevelopment()) app.MapOpenApi();
-
-app.MapPingEndpoints();
+app.UseAuthorization();
+app.MapControllers();
 
 app.Run();

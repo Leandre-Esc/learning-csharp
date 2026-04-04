@@ -11,6 +11,8 @@ public class DatabaseMigrator(AppDbContext dbContext, ILogger<DatabaseMigrator> 
         {
             logger.LogInformation("Checking for pending database migrations...");
 
+            await dbContext.Database.EnsureCreatedAsync(ct);
+
             var pendingMigrations = await dbContext.Database
                 .GetPendingMigrationsAsync(ct);
 
