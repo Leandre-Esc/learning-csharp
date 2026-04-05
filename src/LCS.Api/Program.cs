@@ -1,3 +1,4 @@
+using LCS.Application;
 using LCS.Infra;
 using LCS.Infra.Persistence;
 
@@ -9,6 +10,7 @@ var connectionString = builder.Configuration.GetConnectionString("Postgres")
                        ?? throw new InvalidOperationException("Connection string 'Postgres' not found.");
 
 builder.Services.AddInfraServices(connectionString);
+builder.Services.AddApplicationServices();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
